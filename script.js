@@ -150,7 +150,7 @@ function conservationClass(code) {
 }
 
 function snakePhotoHTML(snake, className) {
-  return `<img src="images/${snake.id}.jpg" alt="${snake.name}" class="${className}" loading="lazy"
+  return `<img src="images/${snake.id}.jpg" srcset="images/${snake.id}-sm.jpg 480w, images/${snake.id}.jpg 1024w" sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 280px" alt="${snake.name}" class="${className}" loading="lazy" decoding="async"
     onerror="this.outerHTML = snakeIconSVG(SNAKE_BY_ID['${snake.id}']);" />`;
 }
 
@@ -225,7 +225,8 @@ function buildModalMarkup(snake) {
   }
 
   return `
-    <div class="modal-media">${snakePhotoHTML(snake, "snake-photo")}</div>
+    <div class="modal-bg" id="modalBg"></div>
+    <div class="modal-bg-overlay"></div>
     <div class="modal-content">
       <div class="modal-tags">${tagHTML}${snake.isEndangered ? consHTML : ""}</div>
       <h2 class="modal-name">${snake.name}</h2>
@@ -253,11 +254,27 @@ function openSnakeModal(id) {
 
   lastFocusedEl = document.activeElement;
   dialog.innerHTML = buildModalMarkup(snake);
+  dialog.classList.remove("has-bg");
   overlay.classList.add("open");
   document.body.classList.add("modal-lock");
   const closeBtn = document.getElementById("snakeModalClose");
   if (closeBtn) closeBtn.focus();
   history.replaceState(null, "", "#" + id);
+
+  // Load the snake's photo as a full-bleed modal background; if it fails
+  // to load, quietly keep the existing solid/gradient fallback background.
+  const bgEl = document.getElementById("modalBg");
+  const imgUrl = `images/${snake.id}.jpg`;
+  const bgLoader = new Image();
+  bgLoader.onload = () => {
+    if (!bgEl || document.getElementById("snakeModalDialog") !== dialog) return;
+    bgEl.style.backgroundImage = `url('${imgUrl}')`;
+    dialog.classList.add("has-bg");
+  };
+  bgLoader.onerror = () => {
+    dialog.classList.remove("has-bg");
+  };
+  bgLoader.src = imgUrl;
 }
 
 function closeSnakeModal() {
@@ -347,11 +364,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const burger = document.getElementById("navToggle");
   const navLinks = document.getElementById("navLinks");
 
+  const closeNav = () => {
+    burger.classList.remove("open");
+    navLinks.classList.remove("open");
+    burger.setAttribute('aria-expanded', 'false');
+    navLinks.setAttribute('aria-hidden', 'true');
+  };
+
   if (burger && navLinks) {
     burger.setAttribute('aria-expanded', 'false');
     navLinks.setAttribute('aria-hidden', 'true');
 
-    burger.addEventListener("click", () => {
+    burger.addEventListener("click", (e) => {
+      e.stopPropagation();
       const opened = burger.classList.toggle("open");
       navLinks.classList.toggle("open");
       burger.setAttribute('aria-expanded', opened ? 'true' : 'false');
@@ -359,12 +384,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     navLinks.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => {
-        burger.classList.remove("open");
-        navLinks.classList.remove("open");
-        burger.setAttribute('aria-expanded', 'false');
-        navLinks.setAttribute('aria-hidden', 'true');
-      });
+      link.addEventListener("click", closeNav);
+    });
+
+    // Close on outside click / tap
+    document.addEventListener("click", (e) => {
+      if (burger.classList.contains("open") && !navLinks.contains(e.target) && !burger.contains(e.target)) {
+        closeNav();
+      }
+    });
+
+    // Close on Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && burger.classList.contains("open")) {
+        closeNav();
+        burger.focus();
+      }
+    });
+
+    // Reset state if the viewport crosses back to desktop while open
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1024) closeNav();
     });
   }
 
@@ -376,8 +416,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const target = href.split("#")[0] || "index.html";
     if (target === current || (target === "" && current === "index.html")) {
       link.classList.add("active");
+      link.setAttribute("aria-current", "page");
     }
   });
+
+  // ---------- Header elevation on scroll ----------
+  const header = document.querySelector(".top-header");
+  if (header) {
+    let ticking = false;
+    const applyScrollState = () => {
+      header.classList.toggle("scrolled", window.scrollY > 8);
+      ticking = false;
+    };
+    applyScrollState();
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(applyScrollState);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
 
   // ---------- Review form (footer, present on every page) ----------
   const reviewForm = document.getElementById("reviewForm");

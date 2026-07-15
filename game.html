@@ -4,6 +4,18 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="Play the SnakeVerse Snake game, a smooth, Google-Snake-inspired browser arcade game with touch controls, pause, difficulty levels, and a saved high score." />
+  <meta name="theme-color" content="#12140f" />
+  <link rel="canonical" href="game.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SnakeVerse" />
+  <meta property="og:title" content="Snake Game | SnakeVerse" />
+  <meta property="og:description" content="Play the SnakeVerse Snake game, a smooth, Google-Snake-inspired browser arcade game with touch controls, pause, difficulty levels, and a saved high score." />
+  <meta property="og:image" content="logo.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Snake Game | SnakeVerse" />
+  <meta name="twitter:description" content="Play the SnakeVerse Snake game, a smooth, Google-Snake-inspired browser arcade game with touch controls, pause, difficulty levels, and a saved high score." />
+  <meta name="twitter:image" content="logo.png" />
   <title>Snake Game | SnakeVerse</title>
   <link href="https://fonts.googleapis.com" rel="preconnect" />
   <link
@@ -19,7 +31,7 @@
   <header class="top-header">
     <div class="wrap nav-wrap">
       <a href="index.html" class="site-logo">
-        <img src="logo.png" alt="SnakeVerse logo" class="logo-img" />
+        <img src="logo.png" alt="SnakeVerse logo" class="logo-img" width="44" height="44" />
         <h2 class="logo">SnakeVerse</h2>
       </a>
       <nav aria-label="Primary navigation">
@@ -41,7 +53,7 @@
     </div>
   </header>
 
-  <header class="game-page-hero">
+  <section class="game-page-hero">
     <div class="game-bg-anim" id="gameBgAnim"></div>
     <div class="wrap hero-inner game-hero-inner" style="position:relative;z-index:2;">
       <div class="game-hero-text">
@@ -52,10 +64,53 @@
           and chase a high score.</p>
       </div>
       <div class="game-hero-figure">
-        <img src="my-image.png" alt="Snake Image" class="game-hero-img" />
+        <svg class="game-hero-img" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a coiled snake approaching a golden apple, representing the SnakeVerse arcade game">
+          <defs>
+            <radialGradient id="heroBg" cx="35%" cy="30%" r="80%">
+              <stop offset="0%" stop-color="#232a1a"/>
+              <stop offset="100%" stop-color="#12140f"/>
+            </radialGradient>
+            <filter id="heroGlow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="6" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <circle cx="100" cy="100" r="100" fill="url(#heroBg)"/>
+          <g opacity="0.55" filter="url(#heroGlow)">
+            <circle cx="146.0" cy="53.8" r="20" fill="#c9a227" opacity="0.25"/>
+          </g>
+          <g>
+            <rect x="39.5" y="131.5" width="13.0" height="13.0" rx="4.7" fill="#86a05f"/>
+            <rect x="48.2" y="130.2" width="13.8" height="13.8" rx="5.0" fill="#8ca05a"/>
+            <rect x="56.9" y="128.3" width="14.6" height="14.6" rx="5.3" fill="#92a055"/>
+            <rect x="65.5" y="125.2" width="15.5" height="15.5" rx="5.6" fill="#98a150"/>
+            <rect x="74.2" y="120.5" width="16.3" height="16.3" rx="5.9" fill="#9ea14b"/>
+            <rect x="82.9" y="114.0" width="17.1" height="17.1" rx="6.2" fill="#a4a146"/>
+            <rect x="91.6" y="105.5" width="17.9" height="17.9" rx="6.4" fill="#aba140"/>
+            <rect x="100.3" y="95.2" width="18.7" height="18.7" rx="6.7" fill="#b1a13b"/>
+            <rect x="109.0" y="83.3" width="19.5" height="19.5" rx="7.0" fill="#b7a136"/>
+            <rect x="117.6" y="70.2" width="20.4" height="20.4" rx="7.3" fill="#bda231"/>
+            <rect x="126.3" y="56.5" width="21.2" height="21.2" rx="7.6" fill="#c3a22c"/>
+          </g>
+          <ellipse cx="146.0" cy="53.8" rx="15.5" ry="12.5" fill="#c9a227" transform="rotate(-55.6 146.0 53.8)"/>
+          <circle cx="152.9" cy="53.3" r="2.6" fill="#1a1306"/>
+          <circle cx="144.0" cy="47.2" r="2.6" fill="#1a1306"/>
+          <circle cx="152.1" cy="52.5" r="0.9" fill="#fff8e0"/>
+          <circle cx="143.2" cy="46.4" r="0.9" fill="#fff8e0"/>
+          <polyline points="155.3,40.2 159.4,34.3 163.4,31.7" fill="none" stroke="#d94848" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="159.4,34.3 160.4,29.6" fill="none" stroke="#d94848" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <g filter="url(#heroGlow)">
+            <path d="M 158.4 26.7 q 3 -4 5 -1" fill="none" stroke="#3f9142" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="158.4" cy="35.7" r="6.6" fill="#e0453f"/>
+            <circle cx="156.4" cy="33.7" r="1.8" fill="#f2857f"/>
+          </g>
+        </svg>
       </div>
     </div>
-  </header>
+  </section>
 
   <svg class="zigzag" preserveaspectratio="none" viewbox="0 0 1080 22">
     <path
@@ -75,7 +130,7 @@
 
             <div class="game-overlay" id="gameOverlay">
               <div class="overlay-title" id="overlayTitle">Snake,<br /><em>uncaged.</em></div>
-              <p class="overlay-sub" id="overlaySub">Use arrow keys or WASD — or tap the D-pad on mobile. Watch for the
+              <p class="overlay-sub" id="overlaySub">Use arrow keys or WASD — or tap the D-pad or swipe on mobile. Watch for the
                 golden fruit — it only sticks around a few seconds. Pick a difficulty above, then hit Play.</p>
               <div class="overlay-score" id="overlayScore" style="display:none"></div>
               <button class="btn-play" id="startBtn" onclick="startGame()">▶ Play</button>
@@ -124,7 +179,7 @@
             <span class="speed-label">How to play</span>
             <ul class="game-tips">
               <li>Arrow keys or WASD to steer</li>
-              <li>Tap the D-pad on mobile</li>
+              <li>Tap the D-pad or swipe on the board on mobile</li>
               <li>Grab the golden fruit fast — it's timed</li>
               <li>Don't bite yourself or the walls</li>
             </ul>
@@ -164,8 +219,8 @@
       <div>
         <h3>Leave a Review</h3>
         <form id="reviewForm">
-          <input type="text" name="reviewName" placeholder="Your Name" required>
-          <textarea name="reviewText" placeholder="Your Review" rows="4" required></textarea>
+          <input type="text" name="reviewName" placeholder="Your Name">
+          <textarea name="reviewText" placeholder="Your Review" rows="4"></textarea>
           <button type="submit">Submit</button>
         </form>
         <p id="reviewMsg"></p>
@@ -173,7 +228,7 @@
 
       <div>
         <h3>Developer</h3>
-        <p>Built by <strong>Your Name</strong><br>Full-stack developer &amp; snake enthusiast.</p>
+        <p>Built by <strong>Shubhangi Savant</strong><br>Full-stack developer &amp; snake enthusiast.</p>
         <div class="dev-socials">
           <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
           <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a>

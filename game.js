@@ -7,10 +7,18 @@
 // ============================================================
 (() => {
     const COLS = 20, ROWS = 20;
-    const CELL = 24; // px per cell (canvas = 480)
+    const CELL = 24; // px per cell in logical board space (board = 480x480)
+    const BOARD_PX = COLS * CELL;
     const canvas = document.getElementById('snakeCanvas');
     if (!canvas) return; // safety: script only runs on game.html
     const ctx = canvas.getContext('2d');
+
+    // Render at native pixel density (crisp on retina/high-DPI) while every
+    // draw call below keeps using the original 0–480 logical coordinate space.
+    const DPR = Math.max(1, Math.min(window.devicePixelRatio || 1, 3));
+    canvas.width = BOARD_PX * DPR;
+    canvas.height = BOARD_PX * DPR;
+    ctx.scale(DPR, DPR);
 
     const SPEEDS = { easy: 170, medium: 105, hard: 62 };
     let diffKey = 'easy';
@@ -123,32 +131,14 @@
         ctx.fillStyle = '#fff';
         ctx.beginPath(); ctx.arc(ex1, ey1, 3.6, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); ctx.arc(ex2, ey2, 3.6, 0, Math.PI * 2); ctx.fill();
+
         ctx.fillStyle = '#152033';
         ctx.beginPath();
-
-        ctx.fillStyle = "#152033";
-
-        ctx.beginPath();
-        ctx.arc(
-            ex1 + Math.cos(tang) * 1.2,
-            ey1 + Math.sin(tang) * 1.2,
-            1.8,
-            0,
-            Math.PI * 2
-        );
+        ctx.arc(ex1 + Math.cos(tang) * 1.2, ey1 + Math.sin(tang) * 1.2, 1.8, 0, Math.PI * 2);
         ctx.fill();
-
         ctx.beginPath();
-        ctx.arc(
-            ex2 + Math.cos(tang) * 1.2,
-            ey2 + Math.sin(tang) * 1.2,
-            1.8,
-            0,
-            Math.PI * 2
-        );
+        ctx.arc(ex2 + Math.cos(tang) * 1.2, ey2 + Math.sin(tang) * 1.2, 1.8, 0, Math.PI * 2);
         ctx.fill();
-
-        ctx.beginPath(); ctx.arc(ex2 + Math.cos(tang) * 1.2, ey2 + Math.sin(tang) * 1.2, 1.8, 0, Math.PI * 2); ctx.fill();
 
         // flicking tongue
         if (running && !paused && Math.sin(performance.now() / 140) > 0.5) {
@@ -401,6 +391,38 @@
         if (!running) { startGame(); return; }
         if (d !== opp[dir]) nextDir = d;
     };
+
+    // ── swipe gestures directly on the board (mobile) ──────────────
+    (() => {
+        let touchStartX = 0, touchStartY = 0, touching = false;
+        const SWIPE_MIN = 24; // px before a touch counts as an intentional swipe
+
+        canvas.addEventListener('touchstart', e => {
+            if (!e.touches || !e.touches.length) return;
+            touching = true;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        canvas.addEventListener('touchmove', e => {
+            if (!touching) return;
+            e.preventDefault(); // stop the page from scrolling while steering
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', e => {
+            if (!touching) return;
+            touching = false;
+            const t = e.changedTouches && e.changedTouches[0];
+            if (!t) return;
+            const dx = t.clientX - touchStartX;
+            const dy = t.clientY - touchStartY;
+            if (Math.max(Math.abs(dx), Math.abs(dy)) < SWIPE_MIN) return;
+            const d = Math.abs(dx) > Math.abs(dy)
+                ? (dx > 0 ? 'RIGHT' : 'LEFT')
+                : (dy > 0 ? 'DOWN' : 'UP');
+            window.dpad(d);
+        }, { passive: true });
+    })();
 
     // ── difficulty selector ──────────────────────────────────────
     window.setDifficulty = function (d) {
