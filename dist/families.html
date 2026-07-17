@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="Browse every major snake family in one catalogue. Filter by family or venom type and search by common or scientific name across dozens of species." />
+  <meta name="theme-color" content="#12140f" />
+  <link rel="canonical" href="/assets/families-C_sBZmcx.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SnakeVerse" />
+  <meta property="og:title" content="Snake Families | SnakeVerse" />
+  <meta property="og:description" content="Browse every major snake family in one catalogue. Filter by family or venom type and search by common or scientific name across dozens of species." />
+  <meta property="og:image" content="logo.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Snake Families | SnakeVerse" />
+  <meta name="twitter:description" content="Browse every major snake family in one catalogue. Filter by family or venom type and search by common or scientific name across dozens of species." />
+  <meta name="twitter:image" content="logo.png" />
+  <title>Snake Families | SnakeVerse</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet" />
+  <link rel="icon" href="/assets/logo-ByWKpocU.png" type="image/png" />
+  <link rel="preload" href="/assets/logo-ByWKpocU.png" as="image" />
+  <style id="anti-flash">body { display: none !important; }</style>
+  <script type="module" crossorigin src="/assets/script-DkbQI7hh.js"></script>
+  <script type="module" crossorigin src="/assets/snakes-data-DsESbKRT.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/script-BtrfSOX4.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="top-header">
+    <div class="wrap nav-wrap">
+      <a href="index.html" class="site-logo">
+        <img src="/assets/logo-ByWKpocU.png" alt="SnakeVerse logo" class="logo-img" width="44" height="44" />
+        <h2 class="logo">SnakeVerse</h2>
+      </a>
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links" id="navLinks" role="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="families.html">Snake Families</a></li>
+          <li><a href="endangered.html">Endangered Species</a></li>
+          <li><a href="pets.html">Pet Snakes</a></li>
+          <li><a href="game.html">Snake Game</a></li>
+          <li><a href="report.html">Report a Snake</a></li>
+          <li><a href="index.html#footer">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <span class="visually-hidden">Open navigation</span>
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow">The full catalogue</span>
+      <h1>Every family, <em>one by one.</em></h1>
+      <p>From house-cat-sized burrowers to twenty-foot ambush predators, these 56 species cover all eight major
+        snake families. Filter by family or venom, or just search for a name — then tap a card for the full profile.</p>
+    </div>
+  </section>
+
+  <main id="main-content" class="wrap" style="padding:44px 0 90px;">
+
+    <div class="filter-bar">
+      <div class="filter-row">
+        <div class="filter-chips" id="familyChips"></div>
+        <div class="venom-toggle" id="venomFilter">
+          <button type="button" class="active" data-venom="all">All</button>
+          <button type="button" data-venom="safe">Non-venomous</button>
+          <button type="button" data-venom="venomous">Venomous</button>
+        </div>
+      </div>
+      <div class="search-row">
+        <input type="text" id="snakeSearch" placeholder="Search by common or scientific name…" />
+        <span id="resultCount"></span>
+      </div>
+    </div>
+
+    <div class="snake-grid" id="snakeGrid"></div>
+  </main>
+
+  <footer class="site-footer" id="footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h3>Glossary</h3>
+        <ul class="glossary">
+          <li><strong>Venomous:</strong> Injects venom through fangs.</li>
+          <li><strong>Constriction:</strong> Killing prey by coiling.</li>
+          <li><strong>Elapid:</strong> Fixed front-fanged snakes.</li>
+          <li><strong>Viper:</strong> Hinged long-fanged venomous snake.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="endangered.html">Endangered Species</a></li>
+          <li><a href="pets.html">Pet Snakes</a></li>
+          <li><a href="game.html">Snake Game</a></li>
+          <li><a href="report.html">Report a Snake</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Leave a Review</h3>
+        <form id="reviewForm">
+          <input type="text" name="reviewName" placeholder="Your Name">
+          <textarea name="reviewText" placeholder="Your Review" rows="4"></textarea>
+          <button type="submit">Submit</button>
+        </form>
+        <p id="reviewMsg"></p>
+      </div>
+      <div>
+        <h3>Developer</h3>
+        <p>Built by <strong>Shubhangi Savant</strong><br>Full-stack developer &amp; snake enthusiast.</p>
+        <div class="dev-socials">
+          <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 SnakeVerse — A Field Guide to Snakes. Educational content only, not medical
+      advice.</div>
+  </footer>
+
+</body>
+
+</html>

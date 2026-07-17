@@ -649,3 +649,9 @@ const CONSERVATION_LABEL = {
   CR: "Critically Endangered", EN: "Endangered", VU: "Vulnerable",
   NT: "Near Threatened", LC: "Least Concern"
 };
+
+// Export to global scope for module compatibility
+window.SNAKES = SNAKES;
+window.SNAKE_BY_ID = SNAKE_BY_ID;
+window.CONSERVATION_LABEL = CONSERVATION_LABEL;
+

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="Register a new SnakeVerse account to play the Snake game, report sightings, and manage your session." />
+  <meta name="theme-color" content="#12140f" />
+  <title>Register | SnakeVerse</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet" />
+  <link rel="icon" href="/assets/logo-ByWKpocU.png" type="image/png" />
+  <script type="module" crossorigin src="/assets/register-ANlQjBOG.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/script-DkbQI7hh.js">
+  <link rel="modulepreload" crossorigin href="/assets/auth-helper-CncSeoIZ.js">
+  <link rel="stylesheet" crossorigin href="/assets/script-BtrfSOX4.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="top-header">
+    <div class="wrap nav-wrap">
+      <a href="index.html" class="site-logo">
+        <img src="/assets/logo-ByWKpocU.png" alt="SnakeVerse logo" class="logo-img" width="44" height="44" />
+        <h2 class="logo">SnakeVerse</h2>
+      </a>
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links" id="navLinks" role="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="families.html">Snake Families</a></li>
+          <li><a href="endangered.html">Endangered Species</a></li>
+          <li><a href="pets.html">Pet Snakes</a></li>
+          <li><a href="game.html">Snake Game</a></li>
+          <li><a href="report.html">Report a Snake</a></li>
+          <li><a href="index.html#footer">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <span class="visually-hidden">Open navigation</span>
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow">Create Account</span>
+      <h1>Snakes, <em>uncaged.</em></h1>
+      <p>Sign up today to track your stats in the Snake game, submit observations, and stay connected with the SnakeVerse community.</p>
+    </div>
+  </section>
+
+  <main id="main-content" class="wrap" style="padding:60px 0 90px;">
+    <form class="report-form" id="signup-form" novalidate>
+      
+      <!-- Error alert box -->
+      <div class="form-error-box hidden" id="signup-error" role="alert">
+        <!-- Error message injected here -->
+      </div>
+
+      <div class="form-row">
+        <label for="full-name">Full Name</label>
+        <input type="text" id="full-name" name="fullName" placeholder="Jane Doe" required />
+        <div class="field-error" id="err-full-name"></div>
+      </div>
+
+      <div class="form-row">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+        <div class="field-error" id="err-email"></div>
+      </div>
+
+      <div class="form-row">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" placeholder="••••••••" required />
+          <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+            <!-- Closed eye by default -->
+            <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+            <!-- Open eye, hidden by default -->
+            <svg class="eye-open hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Password Strength Meter -->
+        <div class="strength-bar">
+          <div class="strength-segment"></div>
+          <div class="strength-segment"></div>
+          <div class="strength-segment"></div>
+          <div class="strength-segment"></div>
+        </div>
+        <span class="strength-label" id="strength-label"></span>
+        <div class="field-error" id="err-password"></div>
+      </div>
+
+      <button type="submit" class="btn" id="signup-btn" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;">
+        <span class="btn-text">Register</span>
+        <span class="btn-spinner hidden"></span>
+      </button>
+
+      <p class="auth-switch-text">
+        Already have an account? <a href="login.html">Log in here</a>
+      </p>
+    </form>
+  </main>
+
+  <footer class="site-footer" id="footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h3>Glossary</h3>
+        <ul class="glossary">
+          <li><strong>Venomous:</strong> Injects venom through fangs.</li>
+          <li><strong>Constriction:</strong> Killing prey by coiling.</li>
+          <li><strong>Elapid:</strong> Fixed front-fanged snakes.</li>
+          <li><strong>Viper:</strong> Hinged long-fanged venomous snake.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="families.html">Snake Families</a></li>
+          <li><a href="endangered.html">Endangered Species</a></li>
+          <li><a href="pets.html">Pet Snakes</a></li>
+          <li><a href="game.html">Snake Game</a></li>
+          <li><a href="report.html">Report a Snake</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Leave a Review</h3>
+        <form id="reviewForm">
+          <input type="text" name="reviewName" placeholder="Your Name">
+          <textarea name="reviewText" placeholder="Your Review" rows="4"></textarea>
+          <button type="submit">Submit</button>
+        </form>
+        <p id="reviewMsg"></p>
+      </div>
+      <div>
+        <h3>Developer</h3>
+        <p>Built by <strong>Shubhangi Savant</strong><br>Full-stack developer &amp; snake enthusiast.</p>
+        <div class="dev-socials">
+          <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 SnakeVerse — A Field Guide to Snakes. Educational content only, not medical advice.</div>
+  </footer>
+
+</body>
+
+</html>

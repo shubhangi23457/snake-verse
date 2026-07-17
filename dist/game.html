@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="description" content="Play the SnakeVerse Snake game, a smooth, Google-Snake-inspired browser arcade game with touch controls, pause, difficulty levels, and a saved high score." />
+  <meta name="theme-color" content="#12140f" />
+  <link rel="canonical" href="/assets/game-H_S_afbC.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SnakeVerse" />
+  <meta property="og:title" content="Snake Game | SnakeVerse" />
+  <meta property="og:description" content="Play the SnakeVerse Snake game, a smooth, Google-Snake-inspired browser arcade game with touch controls, pause, difficulty levels, and a saved high score." />
+  <meta property="og:image" content="logo.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Snake Game | SnakeVerse" />
+  <meta name="twitter:description" content="Play the SnakeVerse Snake game, a smooth, Google-Snake-inspired browser arcade game with touch controls, pause, difficulty levels, and a saved high score." />
+  <meta name="twitter:image" content="logo.png" />
+  <title>Snake Game | SnakeVerse</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+    rel="stylesheet" />
+  <link rel="icon" href="/assets/logo-ByWKpocU.png" type="image/png" />
+  <link rel="preload" href="/assets/logo-ByWKpocU.png" as="image" />
+  <style id="anti-flash">body { display: none !important; }</style>
+  <script type="module" crossorigin src="/assets/game-DD12sPAC.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/script-DkbQI7hh.js">
+  <link rel="stylesheet" crossorigin href="/assets/script-BtrfSOX4.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="top-header">
+    <div class="wrap nav-wrap">
+      <a href="index.html" class="site-logo">
+        <img src="/assets/logo-ByWKpocU.png" alt="SnakeVerse logo" class="logo-img" width="44" height="44" />
+        <h2 class="logo">SnakeVerse</h2>
+      </a>
+      <nav aria-label="Primary navigation">
+        <ul class="nav-links" id="navLinks" role="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="families.html">Snake Families</a></li>
+          <li><a href="endangered.html">Endangered Species</a></li>
+          <li><a href="pets.html">Pet Snakes</a></li>
+          <li><a href="game.html">Snake Game</a></li>
+          <li><a href="report.html">Report a Snake</a></li>
+          <li><a href="index.html#footer">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="hamburger" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <span class="visually-hidden">Open navigation</span>
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="game-page-hero">
+    <div class="game-bg-anim" id="gameBgAnim"></div>
+    <div class="wrap hero-inner game-hero-inner" style="position:relative;z-index:2;">
+      <div class="game-hero-text">
+        <span class="eyebrow">Mini game — Google Snake inspired</span>
+        <h1 class="title" style="font-size:clamp(38px,6vw,64px);">Play <em>Snake.</em></h1>
+        <p class="hero-sub">Smooth, gliding movement, four rotating fruits, and a rare golden bonus that's only on
+          the board for a few seconds. Guide your snake without biting yourself or the walls, pick a difficulty,
+          and chase a high score.</p>
+      </div>
+    </div>
+  </section>
+
+  <svg class="zigzag" preserveaspectratio="none" viewbox="0 0 1080 22">
+    <path
+      d="M0,11 Q 15,0 30,11 T 60,11 T 90,11 T 120,11 T 150,11 T 180,11 T 210,11 T 240,11 T 270,11 T 300,11 T 330,11 T 360,11 T 390,11 T 420,11 T 450,11 T 480,11 T 510,11 T 540,11 T 570,11 T 600,11 T 630,11 T 660,11 T 690,11 T 720,11 T 750,11 T 780,11 T 810,11 T 840,11 T 870,11 T 900,11 T 930,11 T 960,11 T 990,11 T 1020,11 T 1050,11 T 1080,11">
+    </path>
+  </svg>
+
+  <main id="main-content" class="wrap">
+    <section id="snake-game" class="game-section">
+
+      <div class="game-layout">
+
+        <div class="game-main">
+          <div class="game-arena">
+            <div class="bonus-toast" id="bonusToast"></div>
+            <canvas height="480" id="snakeCanvas" width="480"></canvas>
+
+            <div class="game-overlay" id="gameOverlay">
+              <div class="overlay-title" id="overlayTitle">Snake,<br /><em>uncaged.</em></div>
+              <p class="overlay-sub" id="overlaySub">Use arrow keys or WASD — or tap the D-pad or swipe on mobile. Watch for the
+                golden fruit — it only sticks around a few seconds. Pick a difficulty above, then hit Play.</p>
+              <div class="overlay-score" id="overlayScore" style="display:none"></div>
+              <button class="btn-play" id="startBtn" onclick="startGame()">▶ Play</button>
+            </div>
+          </div>
+
+          <div class="control-row game-controls">
+            <button class="ctrl-btn" id="pauseBtn" onclick="togglePause()" disabled>⏸ Pause</button>
+            <button class="ctrl-btn" id="restartBtn" onclick="restartGame()">⟲ Restart</button>
+          </div>
+
+          <div class="dpad-wrap">
+            <button class="dpad-btn" id="dpad-up" onpointerdown="dpad('UP')">↑</button>
+            <button class="dpad-btn" id="dpad-left" onpointerdown="dpad('LEFT')">←</button>
+            <button class="dpad-btn" id="dpad-right" onpointerdown="dpad('RIGHT')">→</button>
+            <button class="dpad-btn" id="dpad-down" onpointerdown="dpad('DOWN')">↓</button>
+          </div>
+        </div>
+
+        <aside class="game-side">
+          <div class="game-hud">
+            <div class="hud-block">
+              <div class="hud-num" id="scoreDisplay">0</div>
+              <div class="hud-label">Score</div>
+            </div>
+            <div class="hud-block">
+              <div class="hud-num" id="hiDisplay">0</div>
+              <div class="hud-label">Best</div>
+            </div>
+            <div class="hud-block">
+              <div class="hud-num" id="lenDisplay">3</div>
+              <div class="hud-label">Length</div>
+            </div>
+          </div>
+
+          <div class="side-card">
+            <span class="speed-label">Difficulty</span>
+            <div class="difficulty-row">
+              <button class="diff-btn active" id="diff-easy" onclick="setDifficulty('easy')">Easy</button>
+              <button class="diff-btn" id="diff-medium" onclick="setDifficulty('medium')">Medium</button>
+              <button class="diff-btn" id="diff-hard" onclick="setDifficulty('hard')">Hard</button>
+            </div>
+          </div>
+
+          <div class="side-card">
+            <span class="speed-label">How to play</span>
+            <ul class="game-tips">
+              <li>Arrow keys or WASD to steer</li>
+              <li>Tap the D-pad or swipe on the board on mobile</li>
+              <li>Grab the golden fruit fast — it's timed</li>
+              <li>Don't bite yourself or the walls</li>
+            </ul>
+          </div>
+        </aside>
+
+      </div>
+
+      <div class="leaderboard-section" style="margin-top: 60px;">
+        <div class="section-head" style="margin-bottom: 24px;">
+          <div>
+            <span class="eyebrow">Competition</span>
+            <h2 class="section-title">🏆 Global Leaderboard</h2>
+          </div>
+        </div>
+        <div class="compare-wrap" id="leaderboardContainer">
+          <!-- Leaderboard table will load here dynamically -->
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer" id="footer">
+
+    <div class="wrap footer-grid">
+
+      <div>
+        <h3>Glossary</h3>
+        <ul class="glossary">
+          <li><strong>Venomous:</strong> Injects venom through fangs.</li>
+          <li><strong>Constriction:</strong> Killing prey by coiling.</li>
+          <li><strong>Elapid:</strong> Fixed front-fanged snakes.</li>
+          <li><strong>Viper:</strong> Hinged long-fanged venomous snake.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="endangered.html">Endangered Species</a></li>
+          <li><a href="pets.html">Pet Snakes</a></li>
+          <li><a href="report.html">Report a Snake</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Leave a Review</h3>
+        <form id="reviewForm">
+          <input type="text" name="reviewName" placeholder="Your Name">
+          <textarea name="reviewText" placeholder="Your Review" rows="4"></textarea>
+          <button type="submit">Submit</button>
+        </form>
+        <p id="reviewMsg"></p>
+      </div>
+
+      <div>
+        <h3>Developer</h3>
+        <p>Built by <strong>Shubhangi Savant</strong><br>Full-stack developer &amp; snake enthusiast.</p>
+        <div class="dev-socials">
+          <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="foot-bottom">© 2026 SnakeVerse — A Field Guide to Snakes. Educational content only, not medical advice.</div>
+  </footer>
+
+</body>
+
+</html>
