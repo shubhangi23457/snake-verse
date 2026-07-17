@@ -5,12 +5,17 @@
 // requestAnimationFrame and interpolates between ticks so the
 // snake glides instead of jumping cell to cell.
 // ============================================================
+import { supabase } from './supabase-client.js';
+
 (() => {
     const COLS = 20, ROWS = 20;
     const CELL = 24; // px per cell in logical board space (board = 480x480)
     const BOARD_PX = COLS * CELL;
     const canvas = document.getElementById('snakeCanvas');
     if (!canvas) return; // safety: script only runs on game.html
+    
+    // Cache the authenticated user to avoid redundant Supabase API requests
+    let cachedUser = null;
     const ctx = canvas.getContext('2d');
 
     // Render at native pixel density (crisp on retina/high-DPI) while every
@@ -338,6 +343,251 @@
         if (!paused) lastTickAt = performance.now();
     }
 
+    let lbToastTimer = null;
+    function showLeaderboardToast(text, isError = false) {
+        const el = document.getElementById('bonusToast');
+        if (!el) return;
+        el.textContent = text;
+        if (isError) {
+            el.style.background = 'linear-gradient(120deg, #e0453f, #c22b4e)';
+            el.style.color = '#fff';
+        } else {
+            el.style.background = '';
+            el.style.color = '';
+        }
+        el.classList.add('show');
+        clearTimeout(lbToastTimer);
+        lbToastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+    }
+
+    let showFullLeaderboard = false;
+
+    async function fetchAndRenderLeaderboard() {
+        const container = document.getElementById('leaderboardContainer');
+        if (!container) return;
+
+        // If it's the first load and we don't have HTML in the container yet, show a loader
+        if (!container.innerHTML.trim() || container.querySelector('.btn-spinner')) {
+            container.innerHTML = `
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 40px 0; gap: 12px;">
+                    <span class="btn-spinner" style="width: 24px; height: 24px; margin: 0; border-width: 2.5px; border-top-color: var(--gold);"></span>
+                    <p style="font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-dim); letter-spacing: 0.05em;">LOADING RANKINGS...</p>
+                </div>
+            `;
+        }
+
+        try {
+            if (!cachedUser) {
+                const { data: { user } } = await supabase.auth.getUser();
+                cachedUser = user;
+            }
+            const loggedInUser = cachedUser;
+
+            const limit = showFullLeaderboard ? 100 : 10;
+
+            const { data: scores, error } = await supabase
+                .from('leaderboard')
+                .select('user_id, player_name, score, created_at')
+                .order('score', { ascending: false })
+                .limit(limit);
+
+            if (error) {
+                console.error("Supabase query error fetching leaderboard:", error);
+                container.innerHTML = `
+                    <div style="padding: 20px; text-align: center; border: 1px solid var(--venom); background: rgba(74, 44, 30, 0.4); border-radius: 8px; color: #ff9e9e; font-size: 13px;">
+                        <p><strong>Failed to load leaderboard data.</strong></p>
+                        <p style="font-family:'JetBrains Mono', monospace; font-size: 11px; margin-top: 4px; color: var(--venom);">${error.message}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            if (!scores || scores.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 40px 20px; text-align: center; border: 1px solid var(--line-soft); background: rgba(26, 31, 22, 0.4); border-radius: 8px; color: var(--ink-dim); font-size: 14px;">
+                        <p>No scores yet. Be the first to set a record!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let tableHtml = `
+                <table class="compare">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px; text-align: center;">Rank</th>
+                            <th>Player Name</th>
+                            <th style="text-align: right; width: 140px;">Highest Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            scores.forEach((row, index) => {
+                const rank = index + 1;
+                let rankDisplay = `#${rank}`;
+                if (rank === 1) rankDisplay = '🥇';
+                else if (rank === 2) rankDisplay = '🥈';
+                else if (rank === 3) rankDisplay = '🥉';
+
+                const isCurrentUser = loggedInUser && row.user_id === loggedInUser.id;
+                const highlightClass = isCurrentUser ? 'class="highlighted-user"' : '';
+                
+                let nameDisplay = row.player_name || 'Anonymous';
+                if (isCurrentUser) {
+                    nameDisplay = `${nameDisplay} <span class="badge-you">(You)</span>`;
+                }
+
+                tableHtml += `
+                    <tr ${highlightClass}>
+                        <td style="text-align: center; font-weight: bold; font-family: 'JetBrains Mono', monospace; font-size: 14px;">${rankDisplay}</td>
+                        <td style="font-family: 'Inter', sans-serif;">${nameDisplay}</td>
+                        <td style="text-align: right; font-weight: bold; font-family: 'JetBrains Mono', monospace; color: var(--gold); font-size: 14px;">${row.score}</td>
+                    </tr>
+                `;
+            });
+
+            tableHtml += `
+                    </tbody>
+                </table>
+            `;
+
+            if (!showFullLeaderboard) {
+                tableHtml += `
+                    <div style="padding: 16px; display: flex; justify-content: center; background: rgba(26, 31, 22, 0.5); border-top: 1px solid var(--line-soft);">
+                        <button type="button" class="btn" id="btnExpandLeaderboard" style="padding: 8px 18px; font-size: 11px; align-self: center;">
+                            View Full Leaderboard (Top 100)
+                        </button>
+                    </div>
+                `;
+            } else {
+                tableHtml += `
+                    <div style="padding: 16px; display: flex; justify-content: center; background: rgba(26, 31, 22, 0.5); border-top: 1px solid var(--line-soft);">
+                        <button type="button" class="btn" id="btnCollapseLeaderboard" style="padding: 8px 18px; font-size: 11px; align-self: center;">
+                            Show Top 10
+                        </button>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = tableHtml;
+
+            const expandBtn = document.getElementById('btnExpandLeaderboard');
+            if (expandBtn) {
+                expandBtn.addEventListener('click', () => {
+                    showFullLeaderboard = true;
+                    fetchAndRenderLeaderboard();
+                });
+            }
+
+            const collapseBtn = document.getElementById('btnCollapseLeaderboard');
+            if (collapseBtn) {
+                collapseBtn.addEventListener('click', () => {
+                    showFullLeaderboard = false;
+                    fetchAndRenderLeaderboard();
+                });
+            }
+
+        } catch (err) {
+            console.error("Unexpected error loading leaderboard:", err);
+            container.innerHTML = `
+                <div style="padding: 20px; text-align: center; border: 1px solid var(--venom); background: rgba(74, 44, 30, 0.4); border-radius: 8px; color: #ff9e9e; font-size: 13px;">
+                    <p><strong>An unexpected error occurred.</strong></p>
+                    <p style="font-size: 11px; margin-top: 4px;">Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+
+    async function saveScoreToLeaderboard(score) {
+        try {
+            if (!cachedUser) {
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError) {
+                    console.error("Supabase user verification error:", userError);
+                    return;
+                }
+                cachedUser = user;
+            }
+            const user = cachedUser;
+            
+            if (!user) {
+                console.log("No authenticated user found. Score will not be saved to the database.");
+                return;
+            }
+
+            console.log("Current authenticated user:", user);
+            console.log("Score before saving:", score);
+
+            const userId = user.id;
+            const playerName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Anonymous';
+
+            const { data: existingRecords, error: fetchError } = await supabase
+                .from('leaderboard')
+                .select('id, score')
+                .eq('user_id', userId);
+
+            if (fetchError) {
+                console.error("Supabase error fetching existing leaderboard score:", fetchError);
+                showLeaderboardToast("Failed to verify existing leaderboard score.", true);
+                return;
+            }
+
+            const hasRecord = existingRecords && existingRecords.length > 0;
+            const existingScore = hasRecord ? existingRecords[0].score : null;
+            const recordId = hasRecord ? existingRecords[0].id : null;
+
+            console.log("Existing database score:", existingScore);
+
+            if (!hasRecord) {
+                console.log(`No existing record found for user ${userId}. Inserting new score: ${score}...`);
+                const { error: insertError } = await supabase
+                    .from('leaderboard')
+                    .insert({
+                        user_id: userId,
+                        player_name: playerName,
+                        score: score,
+                        created_at: new Date().toISOString()
+                    });
+
+                if (insertError) {
+                    console.error("Supabase error inserting score:", insertError);
+                    showLeaderboardToast("Failed to save score to leaderboard.", true);
+                } else {
+                    console.log("Score inserted successfully.");
+                    showLeaderboardToast("Score saved to leaderboard!");
+                    fetchAndRenderLeaderboard();
+                }
+            } else {
+                if (score > existingScore) {
+                    console.log(`New score (${score}) is higher than existing score (${existingScore}). Updating record...`);
+                    const { error: updateError } = await supabase
+                        .from('leaderboard')
+                        .update({
+                            player_name: playerName,
+                            score: score,
+                            created_at: new Date().toISOString()
+                        })
+                        .eq('id', recordId);
+
+                    if (updateError) {
+                        console.error("Supabase error updating score:", updateError);
+                        showLeaderboardToast("Failed to update high score on leaderboard.", true);
+                    } else {
+                        console.log("Score updated successfully.");
+                        showLeaderboardToast("New high score saved to leaderboard!");
+                        fetchAndRenderLeaderboard();
+                    }
+                } else {
+                    console.log(`New score (${score}) is not higher than existing score (${existingScore}). Record not updated.`);
+                }
+            }
+        } catch (err) {
+            console.error("Unexpected error saving score to leaderboard:", err);
+            showLeaderboardToast("An unexpected error occurred while saving score.", true);
+        }
+    }
+
     function endGame() {
         running = false;
         paused = false;
@@ -355,6 +605,8 @@
         sc.textContent = 'Score: ' + score + (score === hiScore && score > 0 ? '  🏆 New Best!' : '');
         document.getElementById('startBtn').textContent = '▶ Play Again';
         overlay.classList.remove('hidden');
+
+        saveScoreToLeaderboard(score);
     }
 
     // idle board + demo snake on load
@@ -369,6 +621,9 @@
         drawSnake(1);
         snake = null; prevSnake = null;
     })();
+
+    // Fetch and render initial leaderboard
+    fetchAndRenderLeaderboard();
 
     // ── keyboard ────────────────────────────────────────────────
     const opp = { RIGHT: 'LEFT', LEFT: 'RIGHT', UP: 'DOWN', DOWN: 'UP' };
