@@ -409,12 +409,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ---------- Active nav link ----------
-  const current = (location.pathname.split("/").pop() || "index.html");
+  const current = (location.pathname.split("/").pop() || "index.html").replace(/\.html$/, "");
   document.querySelectorAll(".nav-links a").forEach(link => {
     const href = link.getAttribute("href");
     if (!href) return;
-    const target = href.split("#")[0] || "index.html";
-    if (target === current || (target === "" && current === "index.html")) {
+    const target = (href.split("#")[0] || "index.html").split("/").pop().replace(/\.html$/, "");
+    if (target === current || (target === "index" && current === "")) {
       link.classList.add("active");
       link.setAttribute("aria-current", "page");
     }

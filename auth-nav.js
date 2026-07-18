@@ -7,12 +7,17 @@
 
 import { supabase } from './supabase-client.js';
 
+function getNormalizedPath(pathname) {
+  const file = pathname.split('/').pop() || 'index.html';
+  return file.replace(/\.html$/, '');
+}
+
 async function initAuth() {
-  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+  const cleanPath = getNormalizedPath(window.location.pathname);
   
   // Define protected and auth pages
-  const authPages = ['login.html', 'register.html'];
-  const isAuthPage = authPages.includes(currentPath);
+  const authPages = ['login', 'register'];
+  const isAuthPage = authPages.includes(cleanPath);
 
   // Fetch the current user session
   let user = null;
