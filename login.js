@@ -23,10 +23,19 @@ const emailInput = document.getElementById('email');
 const passInput  = document.getElementById('password');
 const errorEl    = document.getElementById('login-error');
 const loginBtn   = document.getElementById('login-btn');
+const guestBtn   = document.getElementById('guest-btn');
 const toggleBtn  = document.querySelector('.password-toggle');
 
 // Initialize password visibility toggle
 initPasswordToggle(passInput, toggleBtn);
+
+// ── Guest mode button ─────────────────────────────────────────────────────────
+if (guestBtn) {
+  guestBtn.addEventListener('click', () => {
+    localStorage.setItem('snakeverse_guest_mode', 'true');
+    window.location.href = redirectUrl;
+  });
+}
 
 // ── Form submit ───────────────────────────────────────────────────────────────
 loginForm.addEventListener('submit', async (event) => {
@@ -56,6 +65,9 @@ loginForm.addEventListener('submit', async (event) => {
     showError(errorEl, msg);
     return;
   }
+
+  // Clear guest mode on successful authentication
+  localStorage.removeItem('snakeverse_guest_mode');
 
   // Success – navigate to the redirect URL or game page
   window.location.href = redirectUrl;

@@ -512,7 +512,10 @@ import { supabase } from './supabase-client.js';
             const user = cachedUser;
             
             if (!user) {
-                console.log("No authenticated user found. Score will not be saved to the database.");
+                console.log("Guest mode active: Score saved locally.");
+                if (score > 0) {
+                    showLeaderboardToast("Score saved locally! Sign in to join the global leaderboard.");
+                }
                 return;
             }
 

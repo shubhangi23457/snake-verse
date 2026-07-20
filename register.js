@@ -22,12 +22,21 @@ const emailInput   = document.getElementById('email');
 const passInput    = document.getElementById('password');
 const errorEl      = document.getElementById('signup-error');
 const signupBtn    = document.getElementById('signup-btn');
+const guestBtn     = document.getElementById('guest-btn');
 const strengthBar  = document.querySelectorAll('.strength-segment');
 const strengthLabel = document.getElementById('strength-label');
 const toggleBtn    = document.querySelector('.password-toggle');
 
 // Initialize password visibility toggle
 initPasswordToggle(passInput, toggleBtn);
+
+// ── Guest mode button ─────────────────────────────────────────────────────────
+if (guestBtn) {
+  guestBtn.addEventListener('click', () => {
+    localStorage.setItem('snakeverse_guest_mode', 'true');
+    window.location.href = redirectUrl;
+  });
+}
 
 // ── Password strength meter ────────────────────────────────────────────────────
 // Returns a score 0–4 based on simple heuristics.
@@ -96,6 +105,9 @@ signupForm.addEventListener('submit', async (event) => {
     showError(errorEl, msg);
     return;
   }
+
+  // Clear guest mode on successful authentication
+  localStorage.removeItem('snakeverse_guest_mode');
 
   // Success – go to redirectUrl or game page
   window.location.href = redirectUrl;
